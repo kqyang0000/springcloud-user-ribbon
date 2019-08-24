@@ -1,0 +1,54 @@
+spring:
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: h2
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  application:
+    name: springcloud-user-ribbon
+#  cloud:
+#    service-registry:
+#      auto-registration:
+#        enabled: false
+logging:
+  level:
+    root: info
+    org.hibernate: info
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.type.descriptor.sql.BasicExtractor: trace
+info:
+  app:
+    name: @project.artifactId@
+    encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:8761/eureka/,http://peer2:8762/eureka/
+  instance:
+    prefer-ip-address: true
+---
+server:
+  port: 8001
+eureka:
+  instance:
+    hostname: peer1
+spring:
+  profiles: peer1
+---
+server:
+  port: 8002
+eureka:
+  instance:
+    hostname: peer2
+spring:
+  profiles: peer2
